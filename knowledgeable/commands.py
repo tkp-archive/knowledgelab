@@ -8,8 +8,6 @@ def repository(name):
         return kr.KnowledgeRepository.for_uri(name)
     return kr.KnowledgeRepository.create_for_uri(name)
 
-def createTemplate(name):
-
 
 def post(repo, name, message="New revision"):
     kp = kr.KnowledgePost.from_file(name, format='ipynb')
