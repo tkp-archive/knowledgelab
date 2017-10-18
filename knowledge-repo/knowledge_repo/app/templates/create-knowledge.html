@@ -1,0 +1,24 @@
+{% extends "index-base.html" %}
+
+
+{% block header %} Create Knowledge  {% endblock %}
+
+
+{% block content %}
+<center>
+  <br>
+  <h3> Select format to download a knowledge stub. </h3>
+  <br>
+  <div class="create-btn-group" role="group">
+    <a class="btn btn-primary" href="create/ipynb" role="button"> Jupyter Notebook </a>
+    <a class="btn btn-primary" href="create/Rmd" role="button"> R-Markdown </a>
+    <a class="btn btn-primary" href="create/md" role="button"> Markdown </a>
+    {% if web_editor_enabled %}
+    <a class="btn btn-primary" href="{{ url_for('editor.editor') }}" role="button"> Web Editor </a>
+    <a class="btn btn-primary" href="{{ url_for('editor.editor', proxy='true') }}" role="button"> Web Proxy </a>
+    {% endif %}
+</div>
+</center>
+
+
+{% endblock %}
