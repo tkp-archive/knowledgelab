@@ -1,0 +1,36 @@
+
+language: python
+
+python:
+  - "3.5"
+  - "3.5-dev"
+git:
+    submodules: false
+
+before_install:
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    - git submodule update --init --recursive
+
+install:
+    - pip install -r requirements.txt
+    # - pip install coveralls
+    - pip install codecov
+
+
+before_script: # configure a headless display to test plot generation
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 3 # give xvfb some time to start
+
+script: make test
+
+after_success:
+    - codecov --token f8f2787b-4aa9-4161-8b13-88ddde282d57
+    # - coveralls
+
+branches:
+  only:
+  - master
+
+notifications:
+  email: false
