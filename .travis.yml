@@ -3,12 +3,12 @@ language: python
 
 python:
   - "3.5"
-  - "3.5-dev"
+
 git:
     submodules: false
 
 before_install:
-    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+    # - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init --recursive
 
 install:
@@ -25,7 +25,7 @@ before_script: # configure a headless display to test plot generation
 script: make test
 
 after_success:
-    - codecov --token f8f2787b-4aa9-4161-8b13-88ddde282d57
+    - codecov --token c0b8d51d-0f0e-4628-ab28-0d0607e3101a
     # - coveralls
 
 branches:
