@@ -13,9 +13,9 @@ setup(
     description='Knowledge Repo integration for JupyterLab',
     long_description=long_description,
     url='https://github.com/timkpaine/knowledgeable',
-    # download_url='https://github.com/timkpaine/knowledgeable/archive/v0.0.1.tar.gz',
+    download_url='https://github.com/timkpaine/knowledgeable/archive/v0.0.1.tar.gz',
     author='Tim Paine',
-    author_email='timothy.k.paine@gmail.com',
+    author_email='t.paine154@gmail.com',
     license='LGPL',
 
     classifiers=[
