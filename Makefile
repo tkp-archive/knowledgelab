@@ -22,6 +22,14 @@ clean: ## clean the repository
 install:  ## install to site-packages
 	python3 setup.py install
 
+
+serverextension: install ## enable serverextension
+	jupyter serverextension enable --py knowledgeable
+
+
+labextension: install ## enable labextension
+	jupyter labextension install jlab
+
 # Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
 help:
