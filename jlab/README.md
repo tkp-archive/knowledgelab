@@ -1,4 +1,4 @@
-# knowledgeable
+# knowledgelab
 
 A JupyterLab extension.
 
@@ -10,7 +10,7 @@ A JupyterLab extension.
 ## Installation
 
 ```bash
-jupyter labextension install knowledgeable/jlab
+jupyter labextension install knowledgelab/jlab
 ```
 
 ## Development

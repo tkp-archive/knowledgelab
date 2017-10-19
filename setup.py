@@ -8,12 +8,12 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='knowledgeable',
+    name='knowledgelab',
     version='0.0.1',
     description='Knowledge Repo integration for JupyterLab',
     long_description=long_description,
-    url='https://github.com/timkpaine/knowledgeable',
-    download_url='https://github.com/timkpaine/knowledgeable/archive/v0.0.1.tar.gz',
+    url='https://github.com/timkpaine/knowledgelab',
+    download_url='https://github.com/timkpaine/knowledgelab/archive/v0.0.1.tar.gz',
     author='Tim Paine',
     author_email='t.paine154@gmail.com',
     license='LGPL',

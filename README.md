@@ -1,2 +1,2 @@
-# knowledgeable
+# knowledgelab
 KnowledgeRepo + JupyterLab

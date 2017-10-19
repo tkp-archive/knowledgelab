@@ -1,17 +1,17 @@
 run:  ## clean and make target, run target
-	python3 -m knowledgeable 
+	python3 -m knowledgelab 
 
 tests: ## Clean and Make unit tests
-	python3 -m nose -v tests --with-coverage --cover-erase --cover-package=`find knowledgeable -name "*.py" | sed "s=\./==g" | sed "s=/=.=g" | sed "s/.py//g" | tr '\n' ',' | rev | cut -c2- | rev`
+	python3 -m nose -v tests --with-coverage --cover-erase --cover-package=`find knowledgelab -name "*.py" | sed "s=\./==g" | sed "s=/=.=g" | sed "s/.py//g" | tr '\n' ',' | rev | cut -c2- | rev`
 	
 test: ## run the tests for travis CI
-	@ python3 -m nose -v tests --with-coverage --cover-erase --cover-package=`find knowledgeable -name "*.py" | sed "s=\./==g" | sed "s=/=.=g" | sed "s/.py//g" | tr '\n' ',' | rev | cut -c2- | rev`
+	@ python3 -m nose -v tests --with-coverage --cover-erase --cover-package=`find knowledgelab -name "*.py" | sed "s=\./==g" | sed "s=/=.=g" | sed "s/.py//g" | tr '\n' ',' | rev | cut -c2- | rev`
  
 annotate: ## MyPy type annotation check
-	mypy -s knowledgeable  
+	mypy -s knowledgelab  
 
 annotate_l: ## MyPy type annotation check - count only
-	mypy -s knowledgeable | wc -l 
+	mypy -s knowledgelab | wc -l 
 
 clean: ## clean the repository
 	find . -name "__pycache__" | xargs  rm -rf 
@@ -24,7 +24,7 @@ install:  ## install to site-packages
 
 
 serverextension: install ## enable serverextension
-	jupyter serverextension enable --py knowledgeable
+	jupyter serverextension enable --py knowledgelab
 
 
 labextension: install ## enable labextension
