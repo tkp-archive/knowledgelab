@@ -2,11 +2,11 @@ import { IDisposable } from '@phosphor/disposable';
 import { JupyterLabPlugin } from '@jupyterlab/application';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
-import "../style/index.css";
+import '../style/index.css';
 /**
- * The plugin registration information.
+ * Initialization data for the jupyterlab_xkcd extension.
  */
-declare const plugin: JupyterLabPlugin<void>;
+declare const extension: JupyterLabPlugin<void>;
 /**
  * A notebook widget extension that adds a button to the toolbar.
  */
@@ -16,4 +16,4 @@ export declare class ButtonExtension implements DocumentRegistry.IWidgetExtensio
      */
     createNew(panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>): IDisposable;
 }
-export default plugin;
+export default extension;
