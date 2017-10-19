@@ -70,59 +70,54 @@ exports.ButtonExtension = ButtonExtension;
 /**
  * An new widget.
  */
-var NewWidget = (function (_super) {
-    __extends(NewWidget, _super);
+var KnowledgeWidget = (function (_super) {
+    __extends(KnowledgeWidget, _super);
     /**
      * Construct a new xkcd widget.
      */
-    function NewWidget() {
+    function KnowledgeWidget() {
         var _this = _super.call(this) || this;
         _this.settings = services_1.ServerConnection.makeSettings();
-        _this.id = 'newwidget';
-        _this.title.label = 'My Widget';
+        _this.id = 'knowledge';
+        _this.title.label = 'Knowledge';
         _this.title.closable = true;
-        _this.addClass('jp-newWidget');
+        _this.addClass('jp-knowledgeWidget');
         return _this;
     }
     /**
      * Handle update requests for the widget.
      */
-    NewWidget.prototype.onUpdateRequest = function (msg) {
+    KnowledgeWidget.prototype.onUpdateRequest = function (msg) {
     };
-    return NewWidget;
+    return KnowledgeWidget;
 }(widgets_1.Widget));
 ;
 /**
  * Activate the xckd widget extension.
  */
 function activate(app, palette, restorer) {
-    console.log('JupyterLab extension newwidget is activated!');
+    console.log('JupyterLab extension knowledgelab is activated!');
     app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension());
     // Declare a widget variable
     var widget;
     // Add an application command
-    var command = 'newwidget:open';
+    var command = 'knowledge:open';
     app.commands.addCommand(command, {
-        label: 'New Widget',
+        label: 'Knowledge',
         execute: function () {
             if (!widget) {
-                // Create a new widget if one does not exist
-                widget = new NewWidget();
+                widget = new KnowledgeWidget();
                 widget.update();
             }
             if (!tracker.has(widget)) {
-                // Track the state of the widget for later restoration
                 tracker.add(widget);
             }
             if (!widget.isAttached) {
-                // Attach the widget to the main area if it's not there
                 app.shell.addToMainArea(widget);
             }
             else {
-                // Refresh the widget
                 widget.update();
             }
-            // Activate the widget
             app.shell.activateById(widget.id);
         }
     });
@@ -133,7 +128,7 @@ function activate(app, palette, restorer) {
     restorer.restore(tracker, {
         command: command,
         args: function () { return coreutils_1.JSONExt.emptyObject; },
-        name: function () { return 'newwidget'; }
+        name: function () { return 'knowledge'; }
     });
 }
 ;
