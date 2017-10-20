@@ -1,5 +1,5 @@
 import { IDisposable } from '@phosphor/disposable';
-import { JupyterLabPlugin } from '@jupyterlab/application';
+import { JupyterLab, JupyterLabPlugin } from '@jupyterlab/application';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 import '../style/index.css';
@@ -11,6 +11,8 @@ declare const extension: JupyterLabPlugin<void>;
  * A notebook widget extension that adds a button to the toolbar.
  */
 export declare class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
+    private lab;
+    constructor(lab: JupyterLab);
     /**
      * Create a new extension object.
      */

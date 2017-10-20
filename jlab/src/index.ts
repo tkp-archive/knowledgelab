@@ -51,22 +51,29 @@ const extension: JupyterLabPlugin<void> = {
  */
 export
 class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
+  private lab: JupyterLab;
+  constructor(lab: JupyterLab){
+      this.lab = lab;
+  }
+
   /**
    * Create a new extension object.
    */
   createNew(panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>): IDisposable {
+
     let callback = () => {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "/kr/submit?notebook=" + panel.context.path, true);
-      xhr.onload = function (e) {
+      xhr.onload = function (e:any) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             console.log(xhr.responseText);
+            this.lab.commands.execute('knowledge:open')
           } else {
             console.error(xhr.statusText);
           }
         }
-      };
+      }.bind(this);
       xhr.onerror = function (e) {
         console.error(xhr.statusText);
       };
@@ -75,7 +82,7 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
     let button = new ToolbarButton({
       className: 'jp-KnowledgeRepo',
       onClick: callback,
-      tooltip: 'Run All'
+      tooltip: 'Publish Knowledge'
     });
 
     panel.toolbar.insertItem(8, 'runAll', button);
@@ -122,15 +129,78 @@ class KnowledgeWidget extends Widget {
 function activate(app: JupyterLab, palette: ICommandPalette, restorer: ILayoutRestorer) {
   console.log('JupyterLab extension knowledgelab is activated!');
 
-  app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension());
+  app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension(app));
 
   // Declare a widget variable
   let widget: KnowledgeWidget;
 
   // Add an application command
-  const command: string = 'knowledge:open';
-  app.commands.addCommand(command, {
-    label: 'Knowledge',
+  const new_command = 'knowledge:new';
+  const open_command = 'knowledge:open';
+  const submit_command = 'knowledge:submit';
+  app.commands.addCommand(new_command, {
+    label: 'New Knowledge',
+    execute: args => {
+      const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
+      console.log(path);
+      if (!widget) {
+        widget = new KnowledgeWidget();
+        widget.update();
+      }
+      if (!tracker.has(widget)) {
+        tracker.add(widget);
+      }
+      if (!widget.isAttached) {
+        app.shell.addToMainArea(widget);
+      } else {
+        widget.update();
+      }
+      app.shell.activateById(widget.id);
+    }
+  });
+  app.commands.addCommand(open_command, {
+    label: 'New Knowledge',
+    execute: args => {
+      const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
+      console.log(path);
+      if (!widget) {
+        widget = new KnowledgeWidget();
+        widget.update();
+      }
+      if (!tracker.has(widget)) {
+        tracker.add(widget);
+      }
+      if (!widget.isAttached) {
+        app.shell.addToMainArea(widget);
+      } else {
+        widget.update();
+      }
+      app.shell.activateById(widget.id);
+    }
+  });
+  app.commands.addCommand(open_command, {
+    label: 'Open Knowledge',
+    execute: args => {
+      const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
+      console.log(path);
+      if (!widget) {
+        widget = new KnowledgeWidget();
+        widget.update();
+      }
+      if (!tracker.has(widget)) {
+        tracker.add(widget);
+      }
+      if (!widget.isAttached) {
+        app.shell.addToMainArea(widget);
+      } else {
+        widget.update();
+      }
+      app.shell.activateById(widget.id);
+    }
+  });
+
+app.commands.addCommand(submit_command, {
+    label: 'Submit Knowledge',
     execute: () => {
       if (!widget) {
         widget = new KnowledgeWidget();
@@ -149,12 +219,14 @@ function activate(app: JupyterLab, palette: ICommandPalette, restorer: ILayoutRe
   });
 
   // Add the command to the palette.
-  palette.addItem({ command, category: 'Tools' });
+  palette.addItem({ command: new_command, category: 'Tools' });
+  palette.addItem({ command: open_command, category: 'Tools' });
+  palette.addItem({ command: submit_command, category: 'Tools' });
 
   // Track and restore the widget state
   let tracker = new InstanceTracker<Widget>({ namespace: 'tools' });
   restorer.restore(tracker, {
-    command,
+    command: open_command,
     args: () => JSONExt.emptyObject,
     name: () => 'knowledge'
   });
