@@ -159,26 +159,6 @@ function activate(app: JupyterLab, palette: ICommandPalette, restorer: ILayoutRe
     }
   });
   app.commands.addCommand(open_command, {
-    label: 'New Knowledge',
-    execute: args => {
-      const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
-      console.log(path);
-      if (!widget) {
-        widget = new KnowledgeWidget();
-        widget.update();
-      }
-      if (!tracker.has(widget)) {
-        tracker.add(widget);
-      }
-      if (!widget.isAttached) {
-        app.shell.addToMainArea(widget);
-      } else {
-        widget.update();
-      }
-      app.shell.activateById(widget.id);
-    }
-  });
-  app.commands.addCommand(open_command, {
     label: 'Open Knowledge',
     execute: args => {
       const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;

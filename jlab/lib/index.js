@@ -129,27 +129,6 @@ function activate(app, palette, restorer) {
         }
     });
     app.commands.addCommand(open_command, {
-        label: 'New Knowledge',
-        execute: function (args) {
-            var path = typeof args['path'] === 'undefined' ? '' : args['path'];
-            console.log(path);
-            if (!widget) {
-                widget = new KnowledgeWidget();
-                widget.update();
-            }
-            if (!tracker.has(widget)) {
-                tracker.add(widget);
-            }
-            if (!widget.isAttached) {
-                app.shell.addToMainArea(widget);
-            }
-            else {
-                widget.update();
-            }
-            app.shell.activateById(widget.id);
-        }
-    });
-    app.commands.addCommand(open_command, {
         label: 'Open Knowledge',
         execute: function (args) {
             var path = typeof args['path'] === 'undefined' ? '' : args['path'];
