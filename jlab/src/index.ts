@@ -36,9 +36,6 @@ import {
 
 import '../style/index.css';
 
-/**
- * Initialization data for the jupyterlab_xkcd extension.
- */
 const extension: JupyterLabPlugin<void> = {
   id: 'jupyterlab_kr',
   autoStart: true,
@@ -46,9 +43,6 @@ const extension: JupyterLabPlugin<void> = {
   activate: activate
 };
 
-/**
- * A notebook widget extension that adds a button to the toolbar.
- */
 export
 class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
   private lab: JupyterLab;
@@ -56,9 +50,6 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
       this.lab = lab;
   }
 
-  /**
-   * Create a new extension object.
-   */
   createNew(panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>): IDisposable {
 
     let callback = () => {
@@ -80,7 +71,7 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
       xhr.send(null);
     };
     let button = new ToolbarButton({
-      className: 'jp-KnowledgeRepo',
+      className: 'kl-editPostIcon',
       onClick: callback,
       tooltip: 'Publish Knowledge'
     });
@@ -93,13 +84,7 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
 }
 
 
-/**
- * An new widget.
- */
 class KnowledgeWidget extends Widget {
-  /**
-   * Construct a new xkcd widget.
-   */
   constructor() {
     super();
     this.settings = ServerConnection.makeSettings();
@@ -107,17 +92,40 @@ class KnowledgeWidget extends Widget {
     this.id = 'knowledge';
     this.title.label = 'Knowledge';
     this.title.closable = true;
-    this.addClass('jp-knowledgeWidget');
+    this.addClass('kl-widget');
+
+    let div = document.createElement('div');
+    div.className = 'kl-widgetBody';
+
+    let header = document.createElement('h2');
+    header.textContent = 'Knowledge Post';
+    div.appendChild(header);
+    /*
+    header  required  purpose  example
+  title  required  String at top of post  title: This post proves that 2+2=4
+  authors  required  User entity that wrote the post in organization specified format  authors: 
+  - kanye_west
+  - beyonce_knowles
+  tags  required  Topics, projects, or any other uniting principle across posts  tags: 
+  - hiphop
+  - yeezy
+  created_at  required  Date when post was written  created_at: 2016-04-03
+  updated_at  optional  Date when post was last updated  updated_at: 2016-10-10
+  tldr  required  Summary of post takeaways that will be visible in /feed  tldr: I'ma let you finish, but Beyonce had one of the best videos of all time!
+  path  optional  Instead of specifying post path in the CLI, specify with this post header  path: projects/path/to/post/on/repo
+  thumbnail  optional  Specify which image is shown in /feed  thumbnail: 3 OR thumbnail: http://cdn.pcwallart.com/images/giraffe-tongue-wallpaper-1.jpg
+  private  optional  If included, post is only visible to authors and editors set in repo configuration  private: true
+  allowed_groups  optional  If the post is private, specify additional users or groups who can see the post  allowed_groups: ['jay_z', 'taylor_swift', 'rap_community']
+     */
+    div.innerHTML= `<div><label>Title:</label><input class="kl-titleInput"></div>
+       <div><label>Author/s:</label><input class="kl-authorSelect"></div>
+       <div><label>Tags:</label><input class="kl-tagsInput"></div>
+       <div><label>tldr:</label><input class="kl-tldrText"></div>
+      `;
+    this.node.appendChild(div);
   }
 
-  /**
-   * The server settings associated with the widget.
-   */
   readonly settings: ServerConnection.ISettings;
-
-  /**
-   * Handle update requests for the widget.
-   */
   onUpdateRequest(msg: Message): void {
   }
 };
@@ -213,7 +221,4 @@ app.commands.addCommand(submit_command, {
 };
 
 
-/**
- * Export the plugin as default.
- */
 export default extension;

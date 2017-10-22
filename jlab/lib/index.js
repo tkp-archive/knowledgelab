@@ -17,25 +17,16 @@ var services_1 = require("@jupyterlab/services");
 var coreutils_1 = require("@phosphor/coreutils");
 var widgets_1 = require("@phosphor/widgets");
 require("../style/index.css");
-/**
- * Initialization data for the jupyterlab_xkcd extension.
- */
 var extension = {
     id: 'jupyterlab_kr',
     autoStart: true,
     requires: [apputils_1.ICommandPalette, application_1.ILayoutRestorer],
     activate: activate
 };
-/**
- * A notebook widget extension that adds a button to the toolbar.
- */
 var ButtonExtension = (function () {
     function ButtonExtension(lab) {
         this.lab = lab;
     }
-    /**
-     * Create a new extension object.
-     */
     ButtonExtension.prototype.createNew = function (panel, context) {
         var _this = this;
         var callback = function () {
@@ -58,7 +49,7 @@ var ButtonExtension = (function () {
             xhr.send(null);
         };
         var button = new apputils_1.ToolbarButton({
-            className: 'jp-KnowledgeRepo',
+            className: 'kl-editPostIcon',
             onClick: callback,
             tooltip: 'Publish Knowledge'
         });
@@ -70,26 +61,24 @@ var ButtonExtension = (function () {
     return ButtonExtension;
 }());
 exports.ButtonExtension = ButtonExtension;
-/**
- * An new widget.
- */
 var KnowledgeWidget = (function (_super) {
     __extends(KnowledgeWidget, _super);
-    /**
-     * Construct a new xkcd widget.
-     */
     function KnowledgeWidget() {
         var _this = _super.call(this) || this;
         _this.settings = services_1.ServerConnection.makeSettings();
         _this.id = 'knowledge';
         _this.title.label = 'Knowledge';
         _this.title.closable = true;
-        _this.addClass('jp-knowledgeWidget');
+        _this.addClass('kl-widget');
+        var div = document.createElement('div');
+        div.className = 'kl-widgetBody';
+        var header = document.createElement('h2');
+        header.textContent = 'Knowledge Post';
+        div.appendChild(header);
+        div.insertAdjacentHTML('afterend', "<div><label>Title:</label><input class=\"kl-titleInput\"></div>\n       <div><label>Author/s:</label><input class=\"kl-authorSelect\"></div>\n       <div><label>Tags:</label><input class=\"kl-tagsInput\"></div>\n       <div><label>tldr:</label><input class=\"kl-tldrText\"></div>\n      ");
+        _this.node.appendChild(div);
         return _this;
     }
-    /**
-     * Handle update requests for the widget.
-     */
     KnowledgeWidget.prototype.onUpdateRequest = function (msg) {
     };
     return KnowledgeWidget;
@@ -181,7 +170,4 @@ function activate(app, palette, restorer) {
     });
 }
 ;
-/**
- * Export the plugin as default.
- */
 exports.default = extension;
