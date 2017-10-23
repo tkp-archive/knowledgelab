@@ -14,7 +14,6 @@ var disposable_1 = require("@phosphor/disposable");
 var application_1 = require("@jupyterlab/application");
 var apputils_1 = require("@jupyterlab/apputils");
 var services_1 = require("@jupyterlab/services");
-var coreutils_1 = require("@phosphor/coreutils");
 var widgets_1 = require("@phosphor/widgets");
 require("../style/index.css");
 var extension = {
@@ -36,7 +35,7 @@ var ButtonExtension = (function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         console.log(xhr.responseText);
-                        this.lab.commands.execute('knowledge:open');
+                        this.lab.commands.execute('knowledge:open', { path: panel.context.path });
                     }
                     else {
                         console.error(xhr.statusText);
@@ -63,10 +62,10 @@ var ButtonExtension = (function () {
 exports.ButtonExtension = ButtonExtension;
 var KnowledgeWidget = (function (_super) {
     __extends(KnowledgeWidget, _super);
-    function KnowledgeWidget() {
+    function KnowledgeWidget(path) {
         var _this = _super.call(this) || this;
         _this.settings = services_1.ServerConnection.makeSettings();
-        _this.id = 'knowledge';
+        _this.id = 'kr-' + path;
         _this.title.label = 'Knowledge';
         _this.title.closable = true;
         _this.addClass('kl-widget');
@@ -74,12 +73,15 @@ var KnowledgeWidget = (function (_super) {
         div.className = 'kl-widgetBody';
         var header = document.createElement('h2');
         header.textContent = 'Knowledge Post';
+        header.className = 'kl-widgetTitle';
         div.appendChild(header);
-        div.insertAdjacentHTML('afterend', "<div><label>Title:</label><input class=\"kl-titleInput\"></div>\n       <div><label>Author/s:</label><input class=\"kl-authorSelect\"></div>\n       <div><label>Tags:</label><input class=\"kl-tagsInput\"></div>\n       <div><label>tldr:</label><input class=\"kl-tldrText\"></div>\n      ");
+        div.insertAdjacentHTML('beforeend', "<div><input placeholder=\"Title\"></div>\n       <div><input placeholder=\"Author\"></div>\n       <div><input placeholder=\"Tags\"></div>\n       <div><textarea placeholder=\"tl;dr\"></textarea></div>\n       <div><label>Private</label><input type=\"checkbox\"></div>\n       <div><span>Created: </span><span id=\"kr-created\"></span></div>\n       <div><span>Updated: </span><span id=\"kr-created\"></span></div>\n       <div><span>Path: </span><span id=\"kr-path\">" + path + "</span></div>\n       <div><span>ID: </span><span id=\"kr-path\"></span></div>\n       <!--div><span>Thumbnail</span></div>\n       <div><span>Allowed Groups:</span></div-->\n       <div><button>submit</button><button>cancel</button></div>\n      ");
         _this.node.appendChild(div);
         return _this;
     }
-    KnowledgeWidget.prototype.onUpdateRequest = function (msg) {
+    KnowledgeWidget.prototype.setPath = function (path) {
+        var path_span = this.node.querySelector('#kr-path');
+        path_span.textContent = path;
     };
     return KnowledgeWidget;
 }(widgets_1.Widget));
@@ -100,20 +102,9 @@ function activate(app, palette, restorer) {
         label: 'New Knowledge',
         execute: function (args) {
             var path = typeof args['path'] === 'undefined' ? '' : args['path'];
-            console.log(path);
-            if (!widget) {
-                widget = new KnowledgeWidget();
-                widget.update();
-            }
-            if (!tracker.has(widget)) {
-                tracker.add(widget);
-            }
-            if (!widget.isAttached) {
-                app.shell.addToMainArea(widget);
-            }
-            else {
-                widget.update();
-            }
+            widget = new KnowledgeWidget(path);
+            widget.setPath(path);
+            app.shell.addToMainArea(widget);
             app.shell.activateById(widget.id);
         }
     });
@@ -121,39 +112,19 @@ function activate(app, palette, restorer) {
         label: 'Open Knowledge',
         execute: function (args) {
             var path = typeof args['path'] === 'undefined' ? '' : args['path'];
-            console.log(path);
-            if (!widget) {
-                widget = new KnowledgeWidget();
-                widget.update();
-            }
-            if (!tracker.has(widget)) {
-                tracker.add(widget);
-            }
-            if (!widget.isAttached) {
-                app.shell.addToMainArea(widget);
-            }
-            else {
-                widget.update();
-            }
+            widget = new KnowledgeWidget(path);
+            widget.setPath(path);
+            app.shell.addToMainArea(widget);
             app.shell.activateById(widget.id);
         }
     });
     app.commands.addCommand(submit_command, {
         label: 'Submit Knowledge',
-        execute: function () {
-            if (!widget) {
-                widget = new KnowledgeWidget();
-                widget.update();
-            }
-            if (!tracker.has(widget)) {
-                tracker.add(widget);
-            }
-            if (!widget.isAttached) {
-                app.shell.addToMainArea(widget);
-            }
-            else {
-                widget.update();
-            }
+        execute: function (args) {
+            var path = typeof args['path'] === 'undefined' ? '' : args['path'];
+            widget = new KnowledgeWidget(path);
+            app.shell.addToMainArea(widget);
+            widget.setPath(path);
             app.shell.activateById(widget.id);
         }
     });
@@ -161,13 +132,6 @@ function activate(app, palette, restorer) {
     palette.addItem({ command: new_command, category: 'Tools' });
     palette.addItem({ command: open_command, category: 'Tools' });
     palette.addItem({ command: submit_command, category: 'Tools' });
-    // Track and restore the widget state
-    var tracker = new apputils_1.InstanceTracker({ namespace: 'tools' });
-    restorer.restore(tracker, {
-        command: open_command,
-        args: function () { return coreutils_1.JSONExt.emptyObject; },
-        name: function () { return 'knowledge'; }
-    });
 }
 ;
 exports.default = extension;
