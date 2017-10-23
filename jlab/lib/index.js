@@ -30,10 +30,12 @@ var ButtonExtension = (function () {
         var _this = this;
         var callback = function () {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/kr/submit?notebook=" + panel.context.path, true);
+            xhr.open("GET", "/knowledge/submit?notebook=" + panel.context.path, true);
             xhr.onload = function (e) {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
+                        // check if exists, if so populate fields
+                        //TODO
                         console.log(xhr.responseText);
                         this.lab.commands.execute('knowledge:open', { path: panel.context.path });
                     }
@@ -60,6 +62,26 @@ var ButtonExtension = (function () {
     return ButtonExtension;
 }());
 exports.ButtonExtension = ButtonExtension;
+function submitKnowledgeForm(notebook, title, authors, tags, tldr) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/knowledge/post", true);
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                alert(xhr.responseText);
+            }
+            else {
+                console.error(xhr.statusText);
+            }
+        }
+    }.bind(this);
+    xhr.onerror = function (e) {
+        console.error(xhr.statusText);
+    };
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.setRequestHeader('_xsrf', document.cookie.split('=')[1]);
+    xhr.send(JSON.stringify({ notebook: notebook, title: title, authors: authors, tags: tags, tldr: tldr }));
+}
 var KnowledgeWidget = (function (_super) {
     __extends(KnowledgeWidget, _super);
     function KnowledgeWidget(path) {
@@ -69,14 +91,19 @@ var KnowledgeWidget = (function (_super) {
         _this.title.label = 'Knowledge';
         _this.title.closable = true;
         _this.addClass('kl-widget');
-        var div = document.createElement('div');
-        div.className = 'kl-widgetBody';
+        var form = document.createElement('form');
+        form.className = 'kl-widgetBody';
+        form.onsubmit = function () { return false; };
         var header = document.createElement('h2');
         header.textContent = 'Knowledge Post';
         header.className = 'kl-widgetTitle';
-        div.appendChild(header);
-        div.insertAdjacentHTML('beforeend', "<div><input placeholder=\"Title\"></div>\n       <div><input placeholder=\"Author\"></div>\n       <div><input placeholder=\"Tags\"></div>\n       <div><textarea placeholder=\"tl;dr\"></textarea></div>\n       <div><label>Private</label><input type=\"checkbox\"></div>\n       <div><span>Created: </span><span id=\"kr-created\"></span></div>\n       <div><span>Updated: </span><span id=\"kr-created\"></span></div>\n       <div><span>Path: </span><span id=\"kr-path\">" + path + "</span></div>\n       <div><span>ID: </span><span id=\"kr-path\"></span></div>\n       <!--div><span>Thumbnail</span></div>\n       <div><span>Allowed Groups:</span></div-->\n       <div><button>submit</button><button>cancel</button></div>\n      ");
-        _this.node.appendChild(div);
+        form.appendChild(header);
+        form.insertAdjacentHTML('beforeend', "<input id='kl-title' placeholder=\"Title\" required>\n       <input id='kl-authors' placeholder=\"Author/s\" value=\"\" required></div>\n       <input id='kl-tags' placeholder=\"Tags\" value=\"\" required></div>\n       <textarea id='kl-tldr' placeholder=\"tl;dr\" value=\"\" required></textarea></div>\n       <div><label>Private</label><input type=\"checkbox\"></div>\n       <div><span>Created: </span><span id=\"kr-created\"></span></div>\n       <div><span>Updated: </span><span id=\"kr-created\"></span></div>\n       <div><span>Path: </span><span id=\"kr-path\">" + path + "</span></div>\n       <div><span>ID: </span><span id=\"kr-path\"></span></div>\n       <!--div><span>Thumbnail</span></div>\n       <div><span>Allowed Groups:</span></div-->\n       <div><button type=\"submit\" id='kl-submit'>submit</button><button>cancel</button></div>\n      ");
+        var button = form.querySelector('#kl-submit');
+        button.onclick = function () {
+            submitKnowledgeForm(path, form.querySelector('#kl-title').value, form.querySelector('#kl-authors').value.split(','), form.querySelector('#kl-tags').value.split(','), form.querySelector('#kl-tldr').value);
+        };
+        _this.node.appendChild(form);
         return _this;
     }
     KnowledgeWidget.prototype.setPath = function (path) {

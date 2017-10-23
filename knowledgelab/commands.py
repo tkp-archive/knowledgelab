@@ -51,7 +51,7 @@ def nb_to_kp(nb_path, **knowledge_repo_data):
     path = nb_path
 
     # if already have a record
-    if 'knowledge' not in nb.metadata:
+    if 'knowledge' not in nb.metadata or not exists(nb.metadata.knowledge.post_path):
         # new knowledge post, generate id and path for KR copy
         id = str(abs(_gen_hash(nb)))
         created = datetime.now()

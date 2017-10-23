@@ -10,7 +10,7 @@ button.kl-editPostIcon {
     font-size: var(--jp-ui-font-size2);
 }
 
-div.kl-widgetBody {
+form.kl-widgetBody {
     height: 100%;
     width: 100%;
     display: flex;
@@ -18,7 +18,9 @@ div.kl-widgetBody {
     margin: 25px;
 }
 
-div.kl-widgetBody div {
+form.kl-widgetBody input, 
+form.kl-widgetBody textarea, 
+form.kl-widgetBody div {
     margin: 5px;
 }
 

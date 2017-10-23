@@ -46,10 +46,12 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
 
     let callback = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", "/kr/submit?notebook=" + panel.context.path, true);
+      xhr.open("GET", "/knowledge/submit?notebook=" + panel.context.path, true);
       xhr.onload = function (e:any) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
+            // check if exists, if so populate fields
+            //TODO
             console.log(xhr.responseText);
             this.lab.commands.execute('knowledge:open', {path:panel.context.path})
           } else {
@@ -76,6 +78,25 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
   }
 }
 
+function submitKnowledgeForm(notebook:string, title:string, authors:string[], tags:string[], tldr:string): void {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/knowledge/post", true);
+    xhr.onload = function (e:any) {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          alert(xhr.responseText);
+        } else {
+          console.error(xhr.statusText);
+        }
+      }
+    }.bind(this);
+    xhr.onerror = function (e) {
+      console.error(xhr.statusText);
+    };
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.setRequestHeader('_xsrf', document.cookie.split('=')[1])
+    xhr.send(JSON.stringify({notebook:notebook, title:title, authors:authors, tags:tags, tldr:tldr}));
+}
 
 class KnowledgeWidget extends Widget {
   constructor(path: string) {
@@ -87,17 +108,17 @@ class KnowledgeWidget extends Widget {
     this.title.closable = true;
     this.addClass('kl-widget');
 
-    let div = document.createElement('div');
-    div.className = 'kl-widgetBody';
-
+    let form = document.createElement('form');
+    form.className = 'kl-widgetBody';
+    form.onsubmit = () => {return false;};
     let header = document.createElement('h2');
     header.textContent = 'Knowledge Post';
     header.className = 'kl-widgetTitle';
-    div.appendChild(header);
-    div.insertAdjacentHTML('beforeend', `<div><input placeholder="Title"></div>
-       <div><input placeholder="Author"></div>
-       <div><input placeholder="Tags"></div>
-       <div><textarea placeholder="tl;dr"></textarea></div>
+    form.appendChild(header);
+    form.insertAdjacentHTML('beforeend', `<input id='kl-title' placeholder="Title" required>
+       <input id='kl-authors' placeholder="Author/s" value="" required></div>
+       <input id='kl-tags' placeholder="Tags" value="" required></div>
+       <textarea id='kl-tldr' placeholder="tl;dr" value="" required></textarea></div>
        <div><label>Private</label><input type="checkbox"></div>
        <div><span>Created: </span><span id="kr-created"></span></div>
        <div><span>Updated: </span><span id="kr-created"></span></div>
@@ -105,9 +126,18 @@ class KnowledgeWidget extends Widget {
        <div><span>ID: </span><span id="kr-path"></span></div>
        <!--div><span>Thumbnail</span></div>
        <div><span>Allowed Groups:</span></div-->
-       <div><button>submit</button><button>cancel</button></div>
+       <div><button type="submit" id='kl-submit'>submit</button><button>cancel</button></div>
       `);
-    this.node.appendChild(div);
+
+    let button = <HTMLElement>form.querySelector('#kl-submit');
+    button.onclick = () => {
+      submitKnowledgeForm(path,
+                          (<HTMLInputElement>form.querySelector('#kl-title')).value,
+                          (<HTMLInputElement>form.querySelector('#kl-authors')).value.split(','),
+                          (<HTMLInputElement>form.querySelector('#kl-tags')).value.split(','),
+                          (<HTMLInputElement>form.querySelector('#kl-tldr')).value)
+    };
+    this.node.appendChild(form);
   }
 
   setPath(path: string){
