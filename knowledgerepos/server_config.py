@@ -53,14 +53,17 @@ DB_AUTO_UPGRADE = False
 # `KnowledgeAuthProvider` and add either the instance or identifier
 # used for that class below.
 # By default, the knowledge repo offers: ['debug', 'bitbucket', 'github', 'google']
-AUTH_PROVIDERS = ['debug', 'github']
+
+#AUTH_PROVIDERS = ['debug', 'github']
+AUTH_PROVIDERS = ['debug']
 
 # If you are going to use a OAuth provider, you will need to specify client ids
 # and private tokens. This can be done by instantiating instances of
 # `OAuth2Provider` and adding them to the above list, or by specifying OAuth
 # connection properties as demonstrated below for the GitHub authenticator.
-OAUTH_GITHUB_CLIENT_ID = os.environ['OAUTH_GITHUB_CLIENT_ID']
-OAUTH_GITHUB_CLIENT_SECRET = os.environ['OAUTH_GITHUB_CLIENT_SECRET']
+
+#OAUTH_GITHUB_CLIENT_ID = os.environ['OAUTH_GITHUB_CLIENT_ID']
+#OAUTH_GITHUB_CLIENT_SECRET = os.environ['OAUTH_GITHUB_CLIENT_SECRET']
 
 # You can also forgo a fully-fledged sign in process for users
 # by hosting the knowledge repository behind a proxy server that

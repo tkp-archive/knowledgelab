@@ -1,11 +1,21 @@
+import nbformat
+import knowledge_repo as kr
 from notebook.utils import url_path_join
 from notebook.base.handlers import IPythonHandler
 
 
 class SubmitKnowledgeHandler(IPythonHandler):
     def get(self):
-        argument = self.get_argument('notebook')
-        self.finish(argument)
+        notebook = self.get_argument('notebook')
+        try:
+            with open(notebook, 'rb') as fp:
+                nb = nbformat.read(fp, 4)
+                repo = kr.KnowledgeRepository.for_uri('knowledgerepos')
+
+        except:
+            self.finish('File not found')
+        else:
+            self.finish(notebook)
 
 
 def load_jupyter_server_extension(nb_server_app):
