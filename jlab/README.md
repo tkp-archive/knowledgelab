@@ -10,7 +10,7 @@ A JupyterLab extension.
 ## Installation
 
 ```bash
-jupyter labextension install knowledgelab/jlab
+jupyter labextension install knowledgelab
 ```
 
 ## Development
