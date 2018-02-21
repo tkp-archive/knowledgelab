@@ -58,7 +58,7 @@ def nb_to_kp(nb_path, **knowledge_repo_data):
         post_folder = join('knowledgerepos', id)
         post_path = join(post_folder, 'post.ipynb')
 
-        nb.metadata.knowledge = {}
+        nb.metadata.knowledge = nbformat.notebooknode.NotebookNode()
         nb.cells.insert(0, nbformat.notebooknode.NotebookNode())
         nb.cells[0].cell_type = 'raw'
         nb.cells[0].metadata = {}

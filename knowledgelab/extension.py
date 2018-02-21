@@ -6,18 +6,30 @@ from .commands import nb_to_kp
 
 class SubmitKnowledgeHandler(IPythonHandler):
     def get(self):
-        notebook = self.get_argument('notebook')
+        notebook = self.get_argument('notebook', 'error')
         self.finish(notebook)
 
 
 class KnowledgePostHandler(IPythonHandler):
     def post(self):
+        if not self.request.body:
+            self.set_status(401)
+            self.finish('error')
+            return
+
         json = ujson.loads(self.request.body)
+
+        if 'notebook' not in json:
+            self.set_status(401)
+            self.finish('error')
+            return
+
         notebook = json.pop('notebook')
         if not notebook or not json.get('title', None) or not json.get('authors', None) or not json.get('tags', None) or not json.get('tldr', None):
             self.set_status(401)
             self.finish('error')
             return
+
         kp = nb_to_kp(notebook, **json)
         print(kp)
         self.finish('test')

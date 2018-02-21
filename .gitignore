@@ -58,3 +58,7 @@ typings/
 .env
 
 .DS_Store
+__pycache__
+.coverage
+githubkeys.sh
+
