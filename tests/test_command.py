@@ -30,8 +30,13 @@ class TestConfig:
 
     def test_repo(self):
         with patch('knowledge_repo.KnowledgeRepository.for_uri'), \
-             patch('knowledge_repo.KnowledgeRepository.create_for_uri'):
+             patch('knowledge_repo.KnowledgeRepository.create_for_uri'), \
+             patch('knowledgelab.commands.exists') as m:
             from knowledgelab.commands import repository
+
+            m.return_value = False
+            repository('test')
+            m.return_value = True
             repository('test')
 
     def test_metadata_to_header(self):
@@ -65,6 +70,7 @@ class TestConfig:
              patch('knowledgelab.commands.exists') as m2, \
              patch('knowledgelab.commands.metadata_to_header'), \
              patch('knowledgelab.commands.open'):
+
             from knowledgelab.commands import nb_to_kp
             m2.return_value = False
             nb_to_kp('test', title='test', authors=['authors'], tags=['tags'], tldr='tldr', private=False)
@@ -76,6 +82,8 @@ class TestConfig:
                 knowledge = MagicMock()
 
             m.return_value.metadata = Test()
+            m.return_value.metadata['knowledge'] = MagicMock()
             m.return_value.metadata['knowledgelab'] = MagicMock()
+            m.return_value.metadata.knowledge.created = '2017-01-01 00:00:00'
 
             nb_to_kp('test', title='test', authors=['authors'], tags=['tags'], tldr='tldr', private=False)

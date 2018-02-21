@@ -1,5 +1,5 @@
 import tornado.web
-from mock import MagicMock
+from mock import MagicMock, patch
 
 
 class TestConfig:
@@ -28,26 +28,33 @@ class TestConfig:
         s.get()
 
     def test_post(self):
-        from knowledgelab.extension import KnowledgePostHandler
+        with patch('knowledgelab.extension.nb_to_kp'):
+            from knowledgelab.extension import KnowledgePostHandler
 
-        # TODO 401
-        k = KnowledgePostHandler(tornado.web.Application(), MagicMock())
-        k.request = MagicMock()
-        k.request.body = ''
-        k._transforms = []
-        k.post()
+            # TODO 401
+            k = KnowledgePostHandler(tornado.web.Application(), MagicMock())
+            k.request = MagicMock()
+            k.request.body = ''
+            k._transforms = []
+            k.post()
 
-        # TODO 401
-        k = KnowledgePostHandler(tornado.web.Application(), MagicMock())
-        k.request.body = '{}'
-        k._transforms = []
-        k.post()
+            # TODO 401
+            k = KnowledgePostHandler(tornado.web.Application(), MagicMock())
+            k.request.body = '{}'
+            k._transforms = []
+            k.post()
 
-        # TODO OK
-        k = KnowledgePostHandler(tornado.web.Application(), MagicMock())
-        k.request.body = '{"notebook":"test"}'
-        k._transforms = []
-        k.post()
+            # TODO 401
+            k = KnowledgePostHandler(tornado.web.Application(), MagicMock())
+            k.request.body = '{"notebook":"test"}'
+            k._transforms = []
+            k.post()
+
+            # TODO OK
+            k = KnowledgePostHandler(tornado.web.Application(), MagicMock())
+            k.request.body = '{"notebook":"test", "title":"test", "authors":["test"], "tags":["test"], "tldr":"tldr"}'
+            k._transforms = []
+            k.post()
 
     def test_load(self):
         from knowledgelab.extension import load_jupyter_server_extension
