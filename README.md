@@ -1,4 +1,4 @@
-# knowledgelab
+# KnowledgeLab
 Seamless integration of [Knowledge-Repo](https://github.com/airbnb/knowledge-repo) and [JupyterLab](https://github.com/jupyterlab/jupyterlab)
 
 
@@ -14,3 +14,29 @@ Seamless integration of [Knowledge-Repo](https://github.com/airbnb/knowledge-rep
 <!-- [![Beerpay](https://beerpay.io/timkpaine/knowledgelab/badge.svg?style=flat)](https://beerpay.io/timkpaine/knowledgelab) -->
 
 ---
+
+
+## Install
+To install the base package from pip:
+
+`pip install knowledgelab`
+
+To Install from source:
+
+`make install`
+
+
+To install the JupyterLab extension:
+
+`jupyter labextension install knowledgelab`
+
+or from source:
+
+`make labextension`
+
+To enable the Jupyter server extension:
+
+`jupyter serverextension enable --py knowledgelab`
+
+## Getting Started
+[Read the docs!](http://knowledgelab.readthedocs.io/en/latest/index.html)

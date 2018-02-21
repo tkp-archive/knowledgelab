@@ -18,6 +18,7 @@ clean: ## clean the repository
 	find . -name "*.pyc" | xargs rm -rf 
 	find . -name ".ipynb_checkpoints" | xargs  rm -rf 
 	rm -rf .coverage cover htmlcov logs build dist *.egg-info
+	make -C ./docs clean
 
 install:  ## install to site-packages
 	python3 setup.py install
@@ -30,6 +31,9 @@ serverextension: install ## enable serverextension
 labextension: install ## enable labextension
 	jupyter labextension install jlab
 
+docs:  ## make documentation
+	make -C ./docs html
+
 # Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
 help:
@@ -38,4 +42,4 @@ help:
 print-%:
 	@echo '$*=$($*)'
 
-.PHONY: clean run test tests help annotate annotate_l
+.PHONY: clean run test tests help annotate annotate_l docs
