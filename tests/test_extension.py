@@ -1,7 +1,5 @@
 import tornado.web
-import ujson
-from datetime import datetime
-from mock import patch, MagicMock
+from mock import MagicMock
 
 
 class TestConfig:
