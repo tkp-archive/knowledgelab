@@ -13,16 +13,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var disposable_1 = require("@phosphor/disposable");
 var application_1 = require("@jupyterlab/application");
 var apputils_1 = require("@jupyterlab/apputils");
-var services_1 = require("@jupyterlab/services");
+var docmanager_1 = require("@jupyterlab/docmanager");
 var widgets_1 = require("@phosphor/widgets");
 require("../style/index.css");
 var extension = {
     id: 'jupyterlab_kr',
     autoStart: true,
-    requires: [apputils_1.ICommandPalette, application_1.ILayoutRestorer],
+    requires: [docmanager_1.IDocumentManager, apputils_1.ICommandPalette, application_1.ILayoutRestorer],
     activate: activate
 };
-var ButtonExtension = (function () {
+var ButtonExtension = /** @class */ (function () {
     function ButtonExtension(lab) {
         this.lab = lab;
     }
@@ -82,11 +82,10 @@ function submitKnowledgeForm(notebook, title, authors, tags, tldr) {
     xhr.setRequestHeader('_xsrf', document.cookie.split('=')[1]);
     xhr.send(JSON.stringify({ notebook: notebook, title: title, authors: authors, tags: tags, tldr: tldr }));
 }
-var KnowledgeWidget = (function (_super) {
+var KnowledgeWidget = /** @class */ (function (_super) {
     __extends(KnowledgeWidget, _super);
     function KnowledgeWidget(path) {
         var _this = _super.call(this) || this;
-        _this.settings = services_1.ServerConnection.makeSettings();
         _this.id = 'kr-' + path;
         _this.title.label = 'Knowledge';
         _this.title.closable = true;
@@ -116,17 +115,22 @@ var KnowledgeWidget = (function (_super) {
 /**
  * Activate the xckd widget extension.
  */
-function activate(app, palette, restorer) {
+function activate(app, docManager, palette, restorer) {
     console.log('JupyterLab extension knowledgelab is activated!');
     app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension(app));
     // Declare a widget variable
     var widget;
+    var isEnabled = function () {
+        var currentWidget = app.shell.currentWidget;
+        return !!(currentWidget && docManager.contextForWidget(currentWidget));
+    };
     // Add an application command
     var new_command = 'knowledge:new';
     var open_command = 'knowledge:open';
     var submit_command = 'knowledge:submit';
     app.commands.addCommand(new_command, {
         label: 'New Knowledge',
+        isEnabled: isEnabled,
         execute: function (args) {
             var path = typeof args['path'] === 'undefined' ? '' : args['path'];
             widget = new KnowledgeWidget(path);
@@ -137,6 +141,7 @@ function activate(app, palette, restorer) {
     });
     app.commands.addCommand(open_command, {
         label: 'Open Knowledge',
+        isEnabled: isEnabled,
         execute: function (args) {
             var path = typeof args['path'] === 'undefined' ? '' : args['path'];
             widget = new KnowledgeWidget(path);
@@ -147,6 +152,7 @@ function activate(app, palette, restorer) {
     });
     app.commands.addCommand(submit_command, {
         label: 'Submit Knowledge',
+        isEnabled: isEnabled,
         execute: function (args) {
             var path = typeof args['path'] === 'undefined' ? '' : args['path'];
             widget = new KnowledgeWidget(path);

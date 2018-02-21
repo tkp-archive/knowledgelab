@@ -15,12 +15,12 @@ import {
 } from '@jupyterlab/docregistry';
 
 import {
-  NotebookPanel, INotebookModel
-} from '@jupyterlab/notebook';
+  IDocumentManager
+} from '@jupyterlab/docmanager';
 
 import {
-  ServerConnection
-} from '@jupyterlab/services';
+  NotebookPanel, INotebookModel
+} from '@jupyterlab/notebook';
 
 import {
   Widget
@@ -31,13 +31,12 @@ import '../style/index.css';
 const extension: JupyterLabPlugin<void> = {
   id: 'jupyterlab_kr',
   autoStart: true,
-  requires: [ICommandPalette, ILayoutRestorer],
+  requires: [IDocumentManager, ICommandPalette, ILayoutRestorer],
   activate: activate
 };
 
 export
 class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
-  private lab: JupyterLab;
   constructor(lab: JupyterLab){
       this.lab = lab;
   }
@@ -76,6 +75,8 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
       button.dispose();
     });
   }
+
+  lab: JupyterLab;
 }
 
 function submitKnowledgeForm(notebook:string, title:string, authors:string[], tags:string[], tldr:string): void {
@@ -101,7 +102,6 @@ function submitKnowledgeForm(notebook:string, title:string, authors:string[], ta
 class KnowledgeWidget extends Widget {
   constructor(path: string) {
     super();
-    this.settings = ServerConnection.makeSettings();
 
     this.id = 'kr-' + path;
     this.title.label = 'Knowledge';
@@ -145,14 +145,13 @@ class KnowledgeWidget extends Widget {
     path_span.textContent = path;
   }
 
-  readonly settings: ServerConnection.ISettings;
 };
 
 
 /**
  * Activate the xckd widget extension.
  */
-function activate(app: JupyterLab, palette: ICommandPalette, restorer: ILayoutRestorer) {
+function activate(app: JupyterLab, docManager: IDocumentManager, palette: ICommandPalette, restorer: ILayoutRestorer) {
   console.log('JupyterLab extension knowledgelab is activated!');
 
   app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension(app));
@@ -160,12 +159,18 @@ function activate(app: JupyterLab, palette: ICommandPalette, restorer: ILayoutRe
   // Declare a widget variable
   let widget: KnowledgeWidget;
 
+  const isEnabled = () => {
+    const { currentWidget } = app.shell;
+    return !!(currentWidget && docManager.contextForWidget(currentWidget));
+  };
+
   // Add an application command
   const new_command = 'knowledge:new';
   const open_command = 'knowledge:open';
   const submit_command = 'knowledge:submit';
   app.commands.addCommand(new_command, {
     label: 'New Knowledge',
+    isEnabled,
     execute: args => {
       const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
       widget = new KnowledgeWidget(path);
@@ -177,6 +182,7 @@ function activate(app: JupyterLab, palette: ICommandPalette, restorer: ILayoutRe
 
   app.commands.addCommand(open_command, {
     label: 'Open Knowledge',
+    isEnabled,
     execute: args => {
       const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
       widget = new KnowledgeWidget(path);
@@ -188,6 +194,7 @@ function activate(app: JupyterLab, palette: ICommandPalette, restorer: ILayoutRe
 
 app.commands.addCommand(submit_command, {
     label: 'Submit Knowledge',
+    isEnabled,
     execute: args => {
       const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
       widget = new KnowledgeWidget(path);
