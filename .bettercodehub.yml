@@ -13,3 +13,4 @@ languages:
 exclude:
 - /docs/.*
 - .*/setup\.py
+- .*/server\_config\.py
