@@ -16,11 +16,6 @@ Seamless integration of `Knowledge-Repo <https://github.com/airbnb/knowledge-rep
 
    installation
    quickstart
-   plot
-   table
-   export
-   publish
-   live
 
 
 .. |build-status| image:: https://travis-ci.org/timkpaine/knowledgelab.svg?branch=master

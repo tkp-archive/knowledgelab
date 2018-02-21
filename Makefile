@@ -23,10 +23,8 @@ clean: ## clean the repository
 install:  ## install to site-packages
 	python3 setup.py install
 
-
 serverextension: install ## enable serverextension
 	jupyter serverextension enable --py knowledgelab
-
 
 labextension: install ## enable labextension
 	jupyter labextension install jlab
