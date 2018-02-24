@@ -172,7 +172,12 @@ function activate(app: JupyterLab, docManager: IDocumentManager, palette: IComma
     label: 'New Knowledge',
     isEnabled,
     execute: args => {
-      const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
+      let path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
+      if (path === ''){
+        console.error('no path');
+        const { currentWidget } = app.shell;
+        path = docManager.contextForWidget(currentWidget).path;
+      }
       widget = new KnowledgeWidget(path);
       widget.setPath(path);
       app.shell.addToMainArea(widget);
@@ -184,8 +189,12 @@ function activate(app: JupyterLab, docManager: IDocumentManager, palette: IComma
     label: 'Open Knowledge',
     isEnabled,
     execute: args => {
-      const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
-      widget = new KnowledgeWidget(path);
+      let path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
+      if (path === ''){
+        console.error('no path');
+        const { currentWidget } = app.shell;
+        path = docManager.contextForWidget(currentWidget).path;
+      }      widget = new KnowledgeWidget(path);
       widget.setPath(path);
       app.shell.addToMainArea(widget);
       app.shell.activateById(widget.id);
@@ -196,8 +205,12 @@ app.commands.addCommand(submit_command, {
     label: 'Submit Knowledge',
     isEnabled,
     execute: args => {
-      const path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
-      widget = new KnowledgeWidget(path);
+      let path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
+      if (path === ''){
+        console.error('no path');
+        const { currentWidget } = app.shell;
+        path = docManager.contextForWidget(currentWidget).path;
+      }      widget = new KnowledgeWidget(path);
       app.shell.addToMainArea(widget);
       widget.setPath(path);
       app.shell.activateById(widget.id);
