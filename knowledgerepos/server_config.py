@@ -24,7 +24,7 @@ SECRET_KEY = None
 # ---------------------------------------------------
 # Debug configuration
 # ---------------------------------------------------
-DEBUG = False
+DEBUG = True
 
 # ---------------------------------------------------
 # Database configuration
@@ -54,16 +54,16 @@ DB_AUTO_UPGRADE = False
 # used for that class below.
 # By default, the knowledge repo offers: ['debug', 'bitbucket', 'github', 'google']
 
-#AUTH_PROVIDERS = ['debug', 'github']
-AUTH_PROVIDERS = ['debug']
+AUTH_PROVIDERS = ['debug', 'github']
+# AUTH_PROVIDERS = ['debug']
 
 # If you are going to use a OAuth provider, you will need to specify client ids
 # and private tokens. This can be done by instantiating instances of
 # `OAuth2Provider` and adding them to the above list, or by specifying OAuth
 # connection properties as demonstrated below for the GitHub authenticator.
 
-#OAUTH_GITHUB_CLIENT_ID = os.environ['OAUTH_GITHUB_CLIENT_ID']
-#OAUTH_GITHUB_CLIENT_SECRET = os.environ['OAUTH_GITHUB_CLIENT_SECRET']
+OAUTH_GITHUB_CLIENT_ID = os.environ['OAUTH_GITHUB_CLIENT_ID']
+OAUTH_GITHUB_CLIENT_SECRET = os.environ['OAUTH_GITHUB_CLIENT_SECRET']
 
 # You can also forgo a fully-fledged sign in process for users
 # by hosting the knowledge repository behind a proxy server that
@@ -117,7 +117,7 @@ POLICY_ANONYMOUS_VIEW_INDEX = True
 POLICY_ANONYMOUS_VIEW_POST = True
 
 # Should anonymous users be able to view overall statistics
-POLICY_ANONYMOUS_VIEW_STATS = True
+POLICY_ANONYMOUS_VIEW_STATS = False
 
 
 # ---------------------------------------------------

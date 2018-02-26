@@ -18,19 +18,20 @@ class KnowledgePostHandler(IPythonHandler):
             return
 
         json = ujson.loads(self.request.body)
+        print(json)
 
-        if 'notebook' not in json:
+        if 'path' not in json:
             self.set_status(401)
             self.finish('error')
             return
 
-        notebook = json.pop('notebook')
-        if not notebook or not json.get('title', None) or not json.get('authors', None) or not json.get('tags', None) or not json.get('tldr', None):
+        path = json.pop('path')
+        if not path or not json.get('title', None) or not json.get('authors', None) or not json.get('tags', None) or not json.get('tldr', None):
             self.set_status(401)
             self.finish('error')
             return
 
-        kp = nb_to_kp(notebook, **json)
+        kp = nb_to_kp(path, **json)
         print(kp)
         self.finish('test')
 

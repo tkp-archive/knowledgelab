@@ -6,8 +6,6 @@ from os import makedirs
 from os.path import join, exists
 from knowledge_repo.app.deploy import KnowledgeDeployer, get_app_builder
 
-default_header = '---\ntitle: This is a Knowledge Template Header\nauthors:\n- sally_smarts \n- wesley_wisdom\ntags:\n- knowledge\n- example\ncreated_at: 2016-06-29\nupdated_at: 2016-06-30\ntldr: This is short description of the content and findings of the post.\n---'
-
 
 def _gen_hash(nb):
     return hash(ujson.dumps(nb))

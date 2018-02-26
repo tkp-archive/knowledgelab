@@ -79,7 +79,7 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
   lab: JupyterLab;
 }
 
-function submitKnowledgeForm(notebook:string, title:string, authors:string[], tags:string[], tldr:string): void {
+function submitKnowledgeForm(path:string, title:string, authors:string[], tags:string[], tldr:string, notebook:string, knowledge_repo:string): void {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/knowledge/post", true);
     xhr.onload = function (e:any) {
@@ -96,7 +96,7 @@ function submitKnowledgeForm(notebook:string, title:string, authors:string[], ta
     };
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.setRequestHeader('_xsrf', document.cookie.split('=')[1])
-    xhr.send(JSON.stringify({notebook:notebook, title:title, authors:authors, tags:tags, tldr:tldr}));
+    xhr.send(JSON.stringify({path:path, title:title, authors:authors, tags:tags, tldr:tldr, notebook:notebook, knowledge_repo:knowledge_repo}));
 }
 
 class KnowledgeWidget extends Widget {
@@ -116,9 +116,9 @@ class KnowledgeWidget extends Widget {
     header.className = 'kl-widgetTitle';
     form.appendChild(header);
     form.insertAdjacentHTML('beforeend', `<input id='kl-title' placeholder="Title" required>
-       <input id='kl-authors' placeholder="Author/s" value="" required></div>
-       <input id='kl-tags' placeholder="Tags" value="" required></div>
-       <textarea id='kl-tldr' placeholder="tl;dr" value="" required></textarea></div>
+       <input id='kl-authors' placeholder="Author/s" value="" required>
+       <input id='kl-tags' placeholder="Tags" value="" required>
+       <textarea id='kl-tldr' placeholder="tl;dr" value="" required></textarea>
        <div><label>Private</label><input type="checkbox"></div>
        <div><span>Created: </span><span id="kr-created"></span></div>
        <div><span>Updated: </span><span id="kr-created"></span></div>
@@ -126,6 +126,7 @@ class KnowledgeWidget extends Widget {
        <div><span>ID: </span><span id="kr-path"></span></div>
        <!--div><span>Thumbnail</span></div>
        <div><span>Allowed Groups:</span></div-->
+       <input id='kl-kr' placeholder="Knowledge-repo url" value="">
        <div><button type="submit" id='kl-submit'>submit</button><button>cancel</button></div>
       `);
 
@@ -135,7 +136,10 @@ class KnowledgeWidget extends Widget {
                           (<HTMLInputElement>form.querySelector('#kl-title')).value,
                           (<HTMLInputElement>form.querySelector('#kl-authors')).value.split(','),
                           (<HTMLInputElement>form.querySelector('#kl-tags')).value.split(','),
-                          (<HTMLInputElement>form.querySelector('#kl-tldr')).value)
+                          (<HTMLInputElement>form.querySelector('#kl-tldr')).value,
+                          'test',
+                          (<HTMLInputElement>form.querySelector('#kl-kr')).value,
+                          )
     };
     this.node.appendChild(form);
   }
@@ -165,26 +169,8 @@ function activate(app: JupyterLab, docManager: IDocumentManager, palette: IComma
   };
 
   // Add an application command
-  const new_command = 'knowledge:new';
   const open_command = 'knowledge:open';
   const submit_command = 'knowledge:submit';
-  app.commands.addCommand(new_command, {
-    label: 'New Knowledge',
-    isEnabled,
-    execute: args => {
-      let path = typeof args['path'] === 'undefined' ? '': args['path'] as string;
-      if (path === ''){
-        console.error('no path');
-        const { currentWidget } = app.shell;
-        path = docManager.contextForWidget(currentWidget).path;
-      }
-      widget = new KnowledgeWidget(path);
-      widget.setPath(path);
-      app.shell.addToMainArea(widget);
-      app.shell.activateById(widget.id);
-    }
-  });
-
   app.commands.addCommand(open_command, {
     label: 'Open Knowledge',
     isEnabled,
@@ -218,7 +204,6 @@ app.commands.addCommand(submit_command, {
   });
 
   // Add the command to the palette.
-  palette.addItem({command: new_command, category: 'Tools'});
   palette.addItem({command: open_command, category: 'Tools'});
   palette.addItem({command: submit_command, category: 'Tools'});
 };
