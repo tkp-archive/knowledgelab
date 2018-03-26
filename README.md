@@ -9,8 +9,9 @@ Seamless integration of [Knowledge-Repo](https://github.com/airbnb/knowledge-rep
 [![codecov](https://codecov.io/gh/timkpaine/knowledgelab/branch/master/graph/badge.svg)](https://codecov.io/gh/timkpaine/knowledgelab)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/knowledge_lab/Lobby)
 [![BCH compliance](https://bettercodehub.com/edge/badge/timkpaine/knowledgelab?branch=master)](https://bettercodehub.com/)
-[![PyPI](https://img.shields.io/pypi/v/knowledgelab.svg)](https://pypi.python.org/pypi/knowledgelab)
 [![PyPI](https://img.shields.io/pypi/l/knowledgelab.svg)](https://pypi.python.org/pypi/knowledgelab)
+[![PyPI](https://img.shields.io/pypi/v/knowledgelab.svg)](https://pypi.python.org/pypi/knowledgelab)
+[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/knowledgelab)
 <!-- [![Beerpay](https://beerpay.io/timkpaine/knowledgelab/badge.svg?style=flat)](https://beerpay.io/timkpaine/knowledgelab) -->
 
 ---
