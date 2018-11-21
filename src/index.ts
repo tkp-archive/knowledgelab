@@ -79,6 +79,7 @@ class ButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel
   lab: JupyterLab;
 }
 
+export
 function submitKnowledgeForm(path:string, title:string, authors:string[], tags:string[], tldr:string, notebook:string, knowledge_repo:string): void {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/knowledge/post", true);
@@ -99,6 +100,7 @@ function submitKnowledgeForm(path:string, title:string, authors:string[], tags:s
     xhr.send(JSON.stringify({path:path, title:title, authors:authors, tags:tags, tldr:tldr, notebook:notebook, knowledge_repo:knowledge_repo}));
 }
 
+export
 class KnowledgeWidget extends Widget {
   constructor(path: string) {
     super();
@@ -210,3 +212,4 @@ app.commands.addCommand(submit_command, {
 
 
 export default extension;
+export {activate as _activate};
