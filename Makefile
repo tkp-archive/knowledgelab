@@ -7,9 +7,13 @@ testjs: ## Clean and Make js tests
 testpy: ## Clean and Make unit tests
 	python3 -m nose -v tests --with-coverage --cover-erase --cover-package=`find knowledgelab -name "*.py" | sed "s=\./==g" | sed "s=/=.=g" | sed "s/.py//g" | tr '\n' ',' | rev | cut -c2- | rev`
 	
-test: ## run the tests for travis CI
+test: lint ## run the tests for travis CI
 	@ python3 -m nose -v tests --with-coverage --cover-erase --cover-package=`find knowledgelab -name "*.py" | sed "s=\./==g" | sed "s=/=.=g" | sed "s/.py//g" | tr '\n' ',' | rev | cut -c2- | rev`
 	npm install && npm run test
+
+lint: ## run linter
+	pylint knowledgelab || echo
+	flake8 knowledgelab 
 
 annotate: ## MyPy type annotation check
 	mypy -s knowledgelab  
