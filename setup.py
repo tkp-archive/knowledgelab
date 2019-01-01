@@ -21,6 +21,7 @@ setup(
     author_email='t.paine154@gmail.com',
     license='Apache 2.0',
     install_requires=requires,
+    extras_require={'dev': requires + ['nose2', 'pylint', 'flake8']},
 
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -33,13 +34,6 @@ setup(
     ],
 
     keywords='analytics jupyter',
-
-    packages=find_packages(exclude=['tests',]),
+    packages=find_packages(exclude=['tests']),
     zip_safe=False,
-
-    # entry_points={
-    #     'console_scripts': [
-    #         'sample=sample:main',
-    #     ],
-    # },
 )
