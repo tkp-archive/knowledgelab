@@ -7,7 +7,7 @@ knowledgelab
 ===================================
 Seamless integration of `Knowledge-Repo <https://github.com/airbnb/knowledge-repo>`_ and `JupyterLab <https://github.com/jupyterlab/jupyterlab>`_
 
-|build-status| |issues| |waffle| |codecov| |gitter| |bch| |pypiv| |pypil| |docs|
+|build-status| |issues| |codecov| |gitter| |bch| |pypiv| |pypil| |docs|
 
 
 .. toctree::
@@ -27,11 +27,6 @@ Seamless integration of `Knowledge-Repo <https://github.com/airbnb/knowledge-rep
     :alt: Issues
     :scale: 100%
     :target: https://img.shields.io/github/issues/timkpaine/knowledgelab.svg
-
-.. |waffle| image:: https://badge.waffle.io/timkpaine/knowledgelab.svg?label=ready&title=Ready
-    :alt: Waffle
-    :scale: 100%
-    :target: http://waffle.io/timkpaine/knowledgelab
 
 .. |codecov| image:: https://codecov.io/gh/timkpaine/knowledgelab/branch/master/graph/badge.svg
     :alt: Codecov
