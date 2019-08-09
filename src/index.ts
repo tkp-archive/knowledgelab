@@ -3,7 +3,7 @@ import {
 } from '@phosphor/disposable';
 
 import {
-  JupyterLab, JupyterLabPlugin, ILayoutRestorer
+  JupyterLab, JupyterFrontEndPlugin, ILayoutRestorer
 } from '@jupyterlab/application';
 
 import {
@@ -28,7 +28,7 @@ import {
 
 import '../style/index.css';
 
-const extension: JupyterLabPlugin<void> = {
+const extension: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab_kr',
   autoStart: true,
   requires: [IDocumentManager, ICommandPalette, ILayoutRestorer],
@@ -184,7 +184,7 @@ function activate(app: JupyterLab, docManager: IDocumentManager, palette: IComma
         path = docManager.contextForWidget(currentWidget).path;
       }      widget = new KnowledgeWidget(path);
       widget.setPath(path);
-      app.shell.addToMainArea(widget);
+      app.shell.add(widget, 'main');
       app.shell.activateById(widget.id);
     }
   });
@@ -199,7 +199,7 @@ app.commands.addCommand(submit_command, {
         const { currentWidget } = app.shell;
         path = docManager.contextForWidget(currentWidget).path;
       }      widget = new KnowledgeWidget(path);
-      app.shell.addToMainArea(widget);
+      app.shell.add(widget, 'main');
       widget.setPath(path);
       app.shell.activateById(widget.id);
     }
