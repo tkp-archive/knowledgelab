@@ -23,6 +23,10 @@ import {
 } from '@jupyterlab/notebook';
 
 import {
+  IMainMenu,
+} from "@jupyterlab/mainmenu";
+
+import {
   Widget
 } from '@phosphor/widgets';
 
@@ -157,8 +161,12 @@ class KnowledgeWidget extends Widget {
 /**
  * Activate the xckd widget extension.
  */
-function activate(app: JupyterLab, docManager: IDocumentManager, palette: ICommandPalette, restorer: ILayoutRestorer) {
-  console.log('JupyterLab extension knowledgelab is activated!');
+function activate(app: JupyterLab,
+                  docManager: IDocumentManager,
+                  palette: ICommandPalette,
+                  restorer: ILayoutRestorer,
+                  menu: IMainMenu) {
+  console.log('JupyterLab extension knowledgelab is activated!!!');
 
   app.docRegistry.addWidgetExtension('Notebook', new ButtonExtension(app));
 
