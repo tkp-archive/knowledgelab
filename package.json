@@ -1,8 +1,8 @@
 {
   "name": "knowledgelab",
-  "version": "0.0.6",
-  "description": "A JupyterLab extension.",
-  "author": "Tim Paine",
+  "version": "0.0.2",
+  "description": "A JupyterLab extension for knowledge-repo integration",
+  "author": "Tim Paine, Ramindu Deshapriya",
   "main": "lib/index.js",
   "keywords": [
     "jupyter",

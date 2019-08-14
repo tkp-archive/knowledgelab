@@ -16,7 +16,7 @@ setup(
     description='Knowledge Repo integration for JupyterLab',
     long_description=long_description,
     url='https://github.com/ramdesh/knowledgelab',
-    download_url='https://github.com/timkpaine/knowledgelab/archive/v0.0.1.tar.gz',
+    download_url='https://github.com/ramdesh/knowledgelab/archive/v0.0.2.tar.gz',
     author='Tim Paine, Ramindu Deshapriya',
     author_email='t.paine154@gmail.com, rasade88@gmail.com',
     license='Apache 2.0',
