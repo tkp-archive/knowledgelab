@@ -12,11 +12,11 @@ with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
 
 setup(
     name='knowledgelab',
-    version='0.0.1',
+    version='0.0.2',
     description='Knowledge Repo integration for JupyterLab',
     long_description=long_description,
-    url='https://github.com/ramdesh/knowledgelab',
-    download_url='https://github.com/ramdesh/knowledgelab/archive/v0.0.2.tar.gz',
+    url='https://github.com/timkpaine/knowledgelab',
+    download_url='https://github.com/timkpaine/knowledgelab/archive/v0.0.2.tar.gz',
     author='Tim Paine, Ramindu Deshapriya',
     author_email='t.paine154@gmail.com, rasade88@gmail.com',
     license='Apache 2.0',
