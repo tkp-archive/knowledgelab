@@ -40,6 +40,12 @@ labextension: install ## enable labextension
 docs:  ## make documentation
 	make -C ./docs html
 
+dist: js  ## dist to pypi
+	rm -rf dist build
+	python3 setup.py sdist
+	python3 setup.py bdist_wheel
+	twine check dist/* && twine upload dist/*
+
 # Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
 help:
