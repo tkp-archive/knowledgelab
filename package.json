@@ -1,17 +1,21 @@
 {
   "name": "knowledgelab",
-  "version": "0.0.6",
-  "description": "A JupyterLab extension.",
-  "author": "Tim Paine",
+  "version": "0.0.2",
+  "description": "A JupyterLab extension for knowledge-repo integration",
+  "author": "Tim Paine, Ramindu Deshapriya",
   "main": "lib/index.js",
   "keywords": [
     "jupyter",
-    "jupyterlab"
+    "jupyterlab",
+    "jupyterlab-extension"
   ],
   "scripts": {
     "build": "tsc",
+    "build:lab": "rimraf lab-dist && mkdirp lab-dist && cd lab-dist && npm pack ..",
+    "build:all": "npm run build && npm run build:lab",
     "clean": "rimraf lib",
-    "prepublish": "npm run build",
+    "lint": "./node_modules/.bin/tslint './src/*.ts'",
+    "prepublishOnly": "npm run build",
     "test": "jest --coverage --collectCoverageFrom=src/*.{ts}"
   },
   "files": [
@@ -19,24 +23,40 @@
     "style/**/*.css"
   ],
   "jupyterlab": {
-    "extension": true
+    "extension": true,
+    "discovery": {
+      "server": {
+        "base": {
+          "name": "knowledgelab"
+        },
+        "managers": [
+          "pip"
+        ]
+      }
+    }
   },
   "dependencies": {
-    "@jupyterlab/application": "^0.19.0",
-    "@jupyterlab/apputils": "^0.19.0",
-    "@jupyterlab/docmanager": "^0.19.0",
-    "@jupyterlab/docregistry": "^0.19.0",
-    "@jupyterlab/notebook": "^0.19.0",
-    "@jupyterlab/rendermime": "^0.19.0",
-    "@phosphor/disposable": "^1.1.2"
+    "@jupyterlab/application": "^1.0.0",
+    "@jupyterlab/apputils": "^1.0.0",
+    "@jupyterlab/coreutils": "^3.0.0",
+    "@jupyterlab/docmanager": "^1.0.0",
+    "@jupyterlab/docregistry": "^1.0.2",
+    "@jupyterlab/mainmenu": "^1.0.0",
+    "@jupyterlab/notebook": "^1.0.0",
+    "@phosphor/disposable": "^1.1.2",
+    "@types/codemirror": "^0.0.74"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.9",
+    "@babel/preset-env": "^7.5.5",
+    "@types/jest": "^24.0.4",
+    "babel-jest": "^24.8.0",
     "isomorphic-fetch": "^2.2.1",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "jest-transform-css": "^2.0.0",
+    "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1",
     "ts-jest": "^23.10.4",
+    "tslint": "^5.14.0",
     "typescript": "^3.1.6"
   }
 }

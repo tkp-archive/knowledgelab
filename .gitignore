@@ -164,3 +164,4 @@ package-lock.json
 
 .DS_Store
 githubkeys.sh
+.idea
