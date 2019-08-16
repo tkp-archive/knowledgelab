@@ -2,18 +2,18 @@ run:  ## clean and make target, run target
 	python3 -m knowledgelab 
 
 testjs: ## Clean and Make js tests
-	npm run test
+	yarn test
 
 testpy: ## Clean and Make unit tests
 	python3 -m pytest -v tests --cov=knowledgelab
 
 test: lint ## run the tests for travis CI
 	@ python3 -m pytest -v tests --cov=knowledgelab
-	npm install && npm run test
+	yarn test
 
 lint: ## run linter
-	pylint knowledgelab || echo
 	flake8 knowledgelab 
+	yarn lint
 
 annotate: ## MyPy type annotation check
 	mypy -s knowledgelab  
