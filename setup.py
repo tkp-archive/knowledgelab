@@ -21,7 +21,7 @@ setup(
     author_email='t.paine154@gmail.com, rasade88@gmail.com',
     license='Apache 2.0',
     install_requires=requires,
-    extras_require={'dev': requires + ['pytest', 'pytest-cov', 'pylint', 'flake8', 'mock']},
+    extras_require={'dev': requires + ['pytest', 'pytest-cov', 'pylint', 'flake8', 'mock', 'codecov']},
 
     classifiers=[
         'Development Status :: 3 - Alpha',
