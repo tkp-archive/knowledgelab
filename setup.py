@@ -22,12 +22,15 @@ setup(
     license='Apache 2.0',
     install_requires=requires,
     extras_require={'dev': requires + ['pytest', 'pytest-cov', 'pylint', 'flake8', 'mock', 'codecov']},
-
+    python_requires=">=3.7",
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+
     ],
 
     keywords='analytics jupyter',
